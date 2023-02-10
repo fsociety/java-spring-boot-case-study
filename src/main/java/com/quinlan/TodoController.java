@@ -3,6 +3,8 @@ package com.quinlan;
 import com.quinlan.Entity.Todo;
 import com.quinlan.Repository.TodoRepository;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +26,11 @@ public class TodoController {
     }
 
     @GetMapping("/todos")
-    public List<Todo> todos()
+    public Page<Todo> todos(@RequestParam(required = false, defaultValue = "0") Integer page)
     {
-        return todoRepository.findAll(Sort.by(Sort.Direction.DESC,"id"));
+        return todoRepository.findAll(
+                PageRequest.of(page,10, Sort.by(Sort.Direction.DESC,"id"))
+        );
     }
 
     record TodoRequest(

@@ -4,12 +4,22 @@
             const apiRoot = 'http://localhost:5500';
 
             //get all todos
-            $http.get(apiRoot+'/api/v1/todos')
-                .then(({data}) => {
-                    $scope.todos = data;
-                })
-                .catch(err => console.error(err));
+            $scope.getTodos = (page = 0) => {
+                $http.get(`${apiRoot}/api/v1/todos?page=${page}`)
+                    .then(({data}) => {
+                        $scope.todos = data.content;
+                        $scope.pageInfo = {
+                            totalPages: data.totalPages,
+                            first: data.first,
+                            last: data.last,
+                            current: data.number,
+                            empty: data.empty
+                        };
+                    })
+                    .catch(err => console.error(err));
+            }
 
+            $scope.getTodos();
 
             $scope.insertOrUpdate = (id = null) => {
                 const data = {
@@ -23,10 +33,13 @@
                 $http.post(post_url,data)
                 .then(({data}) => {
                     if(id === null){
+                        $scope.getTodos();
+                        /*
                         $scope.todos = [
                             data,
                             ...$scope.todos
                         ];
+                         */
                     }else{
                         $scope.todos = $scope.todos.map(e => e.id === id ? data : e);
                     }
