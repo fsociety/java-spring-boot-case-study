@@ -13,6 +13,7 @@ import java.util.Optional;
 @SpringBootApplication
 @RestController
 @RequestMapping("/api/v1")
+@CrossOrigin(origins = "*")
 public class TodoController {
 
     private final TodoRepository todoRepository;
@@ -33,7 +34,7 @@ public class TodoController {
             Boolean done
     ){}
     @PostMapping(value = "/todo/add", produces = "application/json")
-    public String addTodo(@RequestBody TodoRequest request)
+    public ResponseEntity<String> addTodo(@RequestBody TodoRequest request)
     {
         try {
             Todo todo = new Todo();
@@ -41,15 +42,16 @@ public class TodoController {
             todo.setDescription(request.description);
             todo.setDone(request.done);
             todoRepository.save(todo);
-            return "{\"title\": "+ request.title +" ," +
-                    "\"success\": true, " +
-                    "\"msg\": \"Successfully Added.\" " +
-                    "}";
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(todo.toJson());
         }catch (Exception e){
-            return "{\"title\": "+ request.title +" ," +
-                    "\"msg\": "+ e.toString() +", " +
-                    "\"error\": true " +
-                    "}";
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("{\"title\": "+ request.title +" ," +
+                            "\"msg\": "+ e.toString() +", " +
+                            "\"error\": true " +
+                            "}");
         }
     }
 

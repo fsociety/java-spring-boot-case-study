@@ -38,7 +38,7 @@ public class Todo {
     }
 
     public void setTitle(String title) {
-        this.title = title;
+        if(title != null){this.title = title;}
     }
 
     public String getDescription() {
@@ -46,7 +46,7 @@ public class Todo {
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        if(description != null){this.description = description;}
     }
 
     public Boolean getDone() {
@@ -54,7 +54,7 @@ public class Todo {
     }
 
     public void setDone(Boolean done) {
-        this.done = done;
+        if(done != null){this.done = done;}
     }
 
     @Override
@@ -70,5 +70,22 @@ public class Todo {
         return Objects.hash(id, title, description, done);
     }
 
+    @Override
+    public String toString() {
+        return "Todo{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", done=" + done +
+                '}';
+    }
 
+    public String toJson() {
+        return "{" +
+                "\"id\": " + id +
+                ", \"title\": \""+ title +"\" " +
+                ", \"description\": \""+ description +"\" " +
+                ", \"done\": " + done +
+                '}';
+    }
 }
