@@ -3,6 +3,7 @@ package com.quinlan;
 import com.quinlan.Entity.Todo;
 import com.quinlan.Repository.TodoRepository;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public class TodoController {
     @GetMapping("/todos")
     public List<Todo> todos()
     {
-        return todoRepository.findAll();
+        return todoRepository.findAll(Sort.by(Sort.Direction.DESC,"id"));
     }
 
     record TodoRequest(
@@ -67,10 +68,7 @@ public class TodoController {
             todoRepository.save(todo);
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body("{\"id\": "+ id +" ," +
-                    "\"success\": true, " +
-                    "\"msg\": \"Successfully Updated.\" " +
-                    "}");
+                    .body(todo.toJson());
         }catch (Exception e){
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
