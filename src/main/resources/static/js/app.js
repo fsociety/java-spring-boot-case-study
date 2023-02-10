@@ -47,5 +47,18 @@
                 $scope.done = todo.done;
                 $scope.todoId = id;
             }
+
+            $scope.deleteTodo = async (id) => {
+                await $http.delete(apiRoot+'/api/v1/todo/destroy/'+id);
+                console.log('deleted');
+                let el = document.querySelector(`div[data-todo="${id}"]`);
+                el.classList.add('remove-transition');
+                setTimeout(() => {
+                    $scope.$apply(() => {
+                        $scope.todos = $scope.todos.filter(e => e.id !== id);
+                    });
+                },600)
+            }
+
         });
 })();
