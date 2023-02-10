@@ -28,6 +28,10 @@ then create database
 
 Finally, open this project with "IntelliJ IDEA"
 
+## To get started
+
+go to this url in your browser http://localhost:5500
+
 -----
 *if you want to get postman collection click this button*
 
